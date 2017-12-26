@@ -30,6 +30,8 @@ var btns = {};
 var playerAnswer = 0;
 var correctBtnIndex = 0;
 var score = 0;
+const TIME_TO_ANSWER = 3; 
+var timer = 0;
 
 populateRegions();
 populateRegionsUI();
@@ -37,6 +39,7 @@ regionSelection();
 startGame();
 btns = getBtns();
 getPlayerAnswer();
+var timerIntervalId = 0;
 
 function populateRegionsUI(){
     var dropdownElt = document.querySelector(".dropdown-menu");
@@ -89,6 +92,7 @@ function startGame(){
         }
 
         warningElt.textContent = "";
+        currentRegion = "";
         document.querySelector("#dropdownMenuButton").textContent = "Select region";
         loadNewQuestion(0);
         hideMainScreen();
@@ -104,28 +108,35 @@ function startGame(){
 }
 
 function hideMainScreen(){
-    document.querySelector(".main-screen").style.visibility = "hidden";
+    $(".main-screen").hide();
 }
 
 function showMainScreen(){
-    document.querySelector(".main-screen").style.visibility = "visible";
+    $(".main-screen").show();
 }
 
 function hideGameScreen(){
-    document.querySelector(".game-container").style.visibility = "hidden";
+    $(".game-container").hide();
 }
 
 function showGameScreen(){
-    document.querySelector(".game-container").style.visibility = "visible";
+    $(".game-container").show();
 }
 
 function loadNewQuestion(timeDelay){
+    btns.forEach(function(btn){
+        btn.disabled = true;
+    });
+
     setTimeout(function(){
         currentCountry = randomCountry();
         displayQuestion();
         correctBtnIndex = populateBtns();
         clearResult();
-    }, timeDelay); 
+        btns.forEach(function(btn){
+            btn.disabled = false;
+        });
+    }, timeDelay);
 }
 
 function randomCountry(){
@@ -138,10 +149,7 @@ function randomCountry(){
 }
 
 function isCorrect(){
-    if(playerAnswer === correctBtnIndex){
-        return true;
-    }
-    return false;
+    return playerAnswer === correctBtnIndex;
 }
 
 function getBtns(){
@@ -191,6 +199,8 @@ function getPlayerAnswer(){
 }
 
 function displayResult(){
+    clearInterval(timerIntervalId);
+    document.getElementById("timer").textContent = "-";
     var reponseElt = document.getElementById("answer");
     if(isCorrect()){
         score+=1;
@@ -214,4 +224,17 @@ function updateScore(){
 function displayQuestion(){
     var questionElt = document.getElementById("question");
     questionElt.textContent = "What is the capital of " + currentCountry.name + "?";
+    timerIntervalId = setTimer();
 }
+
+function setTimer(){
+    timer = TIME_TO_ANSWER;
+
+    var timerIntId = setInterval(function(){
+        document.getElementById("timer").textContent= timer;
+        timer-=1;
+    }, 1000);
+    
+    return timerIntId;
+} 
+
