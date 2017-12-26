@@ -10,7 +10,7 @@ body{
 h1{
     font-size: 2em;
     margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 h2{
@@ -57,8 +57,6 @@ footer {
     text-align: center;
 }
 
-
-
 .dropdown{
     float: left;
     margin-top: 5px;
@@ -67,6 +65,7 @@ footer {
     margin-left: 20%;
     text-align: center;
 }
+
 
 #start-game{
     float: left;
@@ -81,6 +80,11 @@ footer {
 
 #question-count{
     margin-top: 15px;
+}
+
+#flag{
+    margin-top: 15px;
+    box-shadow: 5px 5px 5px grey;
 }
 
 @media screen and (max-width: 575px) {
@@ -109,6 +113,14 @@ footer {
 
     .main-screen{
         padding-bottom: 50px;
+    }
+
+    .page-header{
+        font-size: 0.8em;
+    }
+
+    small{
+        font-size: 0.6em;
     }
 }
 

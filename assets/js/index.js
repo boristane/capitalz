@@ -7,6 +7,7 @@ var allCountries = data.map(function(dataEntry){
     country.name = dataEntry.name.common;
     country.capital = dataEntry.capital;
     country.region = dataEntry.region;
+    country.code = dataEntry.cca2.toLowerCase();
     country.description = "The capital of " + dataEntry.name.common + " is " + country.capital + ".";
     return country;
 });
@@ -33,7 +34,7 @@ var playerAnswer = -1;
 var correctBtnIndex = 0;
 var score = 0; 
 var timer;
-var timeDelay = 4000;
+var timeDelay = 2000;
 var questionCount = 0;
 var currentCountriesCount = 0;
 
@@ -236,6 +237,7 @@ function displayQuestion(){
     document.getElementById("timer").textContent = "-";
     displayQuestionCount();
     setTimer();
+    displayFlag();
 }
 
 function setTimer(){
@@ -260,4 +262,10 @@ function stopTimer(){
 
 function displayQuestionCount(){
     document.getElementById("question-count").textContent = "Question " + questionCount + " of " + currentCountriesCount + " in " + currentRegion;
+}
+
+function displayFlag(){
+    var flagElt = document.getElementById("flag");
+    flagElt.setAttribute("src","assets/img/png100px/"+currentCountry.code+".png");
+    document.getElementById("flag-link").setAttribute("href","https://en.wikipedia.org/wiki/"+currentCountry.name);
 }

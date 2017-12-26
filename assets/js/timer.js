@@ -1,4 +1,4 @@
-const TIME_TO_ANSWER = 16;
+const TIME_TO_ANSWER = 11;
 var count = TIME_TO_ANSWER;
 
 var timer = setInterval(function(){
