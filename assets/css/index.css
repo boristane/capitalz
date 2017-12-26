@@ -1,6 +1,49 @@
 body{
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.page-header{
+    border-bottom: 1px solid #ccc;
+}
+
+h1{
+    font-size: 2em;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+h2{
+    font-size: 1.5em;
+}
+
+h3{
+    font-size: 1.0em;
+}
+
+section {
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid grey;
+}
+
+footer a{
+    text-decoration: none;
+    color: grey;
+}
+
+footer a:visited {
+    text-decoration: none;
+    color: grey;
+}
+
+footer a:hover{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+footer {
+    font-size: 0.95em;
 }
 
 .btn-container{
@@ -9,13 +52,12 @@ body{
     text-align: center;
 }
 
-.game-container{
-    text-align: center;
-}
-
+.game-container, 
 .main-screen{
     text-align: center;
 }
+
+
 
 .dropdown{
     float: left;
@@ -30,15 +72,43 @@ body{
     float: left;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-left: 30px;
 }
 
 #warning{
     color: red;
 }
 
-@media screen and (max-width: 600px) {
+#question-count{
+    margin-top: 15px;
+}
+
+@media screen and (max-width: 575px) {
     .dropdown{
+        margin-left: -5px;
+        margin-right: 10px;
+        padding: 0px;
+    }
+
+    .btn-container{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    body{
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    #start-game{
+        float: left;
+        margin-top: 5px;
+        margin-bottom: 5px;
         margin-left: 0px;
+    }
+
+    .main-screen{
+        padding-bottom: 50px;
     }
 }
 

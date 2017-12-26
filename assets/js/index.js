@@ -7,6 +7,7 @@ var allCountries = data.map(function(dataEntry){
     country.name = dataEntry.name.common;
     country.capital = dataEntry.capital;
     country.region = dataEntry.region;
+    country.description = "The capital of " + dataEntry.name.common + " is " + country.capital + ".";
     return country;
 });
 
@@ -20,18 +21,21 @@ function populateRegions(){
     }
 }
 
-regions.push("All");
+const ALL_REGIONS_STRING = "All";
+regions.push(ALL_REGIONS_STRING);
 
 
 var countries = [];
 var currentCountry = {};
 var currentRegion = "";
 var btns = {};
-var playerAnswer = 0;
+var playerAnswer = -1;
 var correctBtnIndex = 0;
-var score = 0;
-const TIME_TO_ANSWER = 3; 
-var timer = 0;
+var score = 0; 
+var timer;
+var timeDelay = 4000;
+var questionCount = 0;
+var currentCountriesCount = 0;
 
 populateRegions();
 populateRegionsUI();
@@ -77,13 +81,13 @@ function startGame(){
     var startElt = document.getElementById("start-game");
     var warningElt = document.getElementById("warning");
     startElt.addEventListener("click", function(){
-        
+        questionCount = 0;
         if(regions.indexOf(currentRegion) === -1){
             warningElt.textContent = "Please select a region :)";
             return;
         }
 
-        if(currentRegion === "All"){
+        if(currentRegion === ALL_REGIONS_STRING){
             countries = allCountries.slice(0);
         }else{
             countries = allCountries.filter(function(country){
@@ -91,8 +95,8 @@ function startGame(){
             });
         }
 
-        warningElt.textContent = "";
-        currentRegion = "";
+        currentCountriesCount = countries.length;
+
         document.querySelector("#dropdownMenuButton").textContent = "Select region";
         loadNewQuestion(0);
         hideMainScreen();
@@ -104,6 +108,10 @@ function startGame(){
     restartElt.addEventListener("click", function(){
         showMainScreen();
         hideGameScreen();
+        score = 0;
+        warningElt.textContent = "";
+        currentRegion = "";
+        updateScoreUI();
     });  
 }
 
@@ -124,6 +132,8 @@ function showGameScreen(){
 }
 
 function loadNewQuestion(timeDelay){
+    playerAnswer = -1;
+    questionCount+=1;
     btns.forEach(function(btn){
         btn.disabled = true;
     });
@@ -175,7 +185,6 @@ function populateBtns(){
 }
 
 function getPlayerAnswer(){
-    var timeDelay = 2000;
     btns[0].addEventListener("click", function(){
         playerAnswer = 0;
         displayResult();
@@ -199,16 +208,16 @@ function getPlayerAnswer(){
 }
 
 function displayResult(){
-    clearInterval(timerIntervalId);
-    document.getElementById("timer").textContent = "-";
+    //document.getElementById("timer").textContent = "-";
     var reponseElt = document.getElementById("answer");
     if(isCorrect()){
         score+=1;
-        reponseElt.textContent = "Correct";
+        reponseElt.textContent = "Correct ! " + currentCountry.description;
     }else{
-        reponseElt.textContent = currentCountry.capital;
+        reponseElt.textContent = "Naah... " + currentCountry.description;
     }
-    updateScore();
+    updateScoreUI();
+    stopTimer();
 }
 
 function clearResult(){
@@ -216,7 +225,7 @@ function clearResult(){
     reponseElt.textContent = "";
 }
 
-function updateScore(){
+function updateScoreUI(){
     var scoreElt = document.getElementById("score");
     scoreElt.textContent = "Score: " + score;
 }
@@ -224,17 +233,31 @@ function updateScore(){
 function displayQuestion(){
     var questionElt = document.getElementById("question");
     questionElt.textContent = "What is the capital of " + currentCountry.name + "?";
-    timerIntervalId = setTimer();
+    document.getElementById("timer").textContent = "-";
+    displayQuestionCount();
+    setTimer();
 }
 
 function setTimer(){
-    timer = TIME_TO_ANSWER;
-
-    var timerIntId = setInterval(function(){
-        document.getElementById("timer").textContent= timer;
-        timer-=1;
-    }, 1000);
-    
-    return timerIntId;
+    var timerElt = document.getElementById("timer");
+    stopTimer();
+    timer = new Worker("assets/js/timer.js");
+    timer.onmessage = function(e){
+        timerElt.textContent = e.data.count;
+        if(e.data.complete === true){
+            timerElt.textContent = "Time out";
+            displayResult();
+            loadNewQuestion(timeDelay);
+        }
+    };
 } 
 
+function stopTimer(){
+    if(typeof timer !== "undefined"){
+        timer.terminate();
+    }
+}
+
+function displayQuestionCount(){
+    document.getElementById("question-count").textContent = "Question " + questionCount + " of " + currentCountriesCount + " in " + currentRegion;
+}
