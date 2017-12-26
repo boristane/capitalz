@@ -1,0 +1,32 @@
+{
+  "name": "capitalz",
+  "version": "1.0.0",
+  "description": "A web game to help learn country capitalz.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boristane/capitalz.git"
+  },
+  "keywords": [
+    "country",
+    "capital",
+    "game"
+  ],
+  "author": "Boris Tane",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boristane/capitalz/issues"
+  },
+  "homepage": "https://github.com/boristane/capitalz#readme",
+  "devDependencies": {
+    "eslint": "^4.14.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

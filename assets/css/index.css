@@ -1,0 +1,47 @@
+body{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.btn-container{
+    margin-left: 20%;
+    margin-right: 20%;
+    text-align: center;
+}
+
+.game-container{
+    text-align: center;
+}
+
+.main-screen{
+    text-align: center;
+}
+
+.dropdown{
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    margin-left: 20%;
+    text-align: center;
+}
+
+#start-game{
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#warning{
+    color: red;
+}
+
+@media screen and (max-width: 600px) {
+    .dropdown{
+        margin-left: 0px;
+    }
+}
+
+
+
+
