@@ -170,9 +170,8 @@ function getNumPlayers(){
                 return;
             }
             numPlayers = Number(numPlayerElt.id[0]);
-            for(var j=0; j<numPlayers; j++){
-                scores.push(0);
-            }
+            scores = new Array(numPlayers).fill(0);
+            console.log(scores.length);
             hideMultiPlayerUI();
             setScoreUI();
         });
