@@ -14,25 +14,46 @@
 	
 	<body>
 
-        <div class="page-header">
-            <h1>capitalz<small> learn capitals the fun way !</small></h1>
-        </div>
+        <header class="page-header">
+            <h1><a href="index.html">capitalz</a><small> learn capitals the fun way !</small></h1>
+        </header>
 
         <section class="main-screen">
             <h1>Welcome to capitalz</h1>
             <h2>Which region would you like to play ?</h2>
 
-            <div class="dropdown show col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!--<div class="dropdown show col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <button class="btn btn-secondary dropdown-toggle col-lg-12 col-md-12 col-sm-12 col-xs-12" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Select region
                 </button>
-                <div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <div id = "dropdown-menu" class="dropdown-menu1 col-lg-12 col-md-12 col-sm-12 col-xs-12" aria-labelledby="dropdownMenuLink">
+                </div>
+            </div>-->
+
+            <!-- Example split danger button -->
+            <div class="btn-group dropdown show col-lg-4 col-md-4 col-sm-12 col-xs-12" >
+                <button type="button" class="btn btn-secondary col-lg-9 col-md-9 col-sm-9 col-xs-9" id="dropdownMenuButton">Select Region</button>
+                <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split col-lg-3 col-md-3 col-sm-3 col-xs-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu">
+                
                 </div>
             </div>
-            <button id="start-game" type="button" class="btn btn-secondary col-lg-3 col-md-3 col-sm-3 col-xs-3">Start game !</button>
-            </br>
-            </br>
-            <h3 id="warning"></h3>
+
+            <div>
+                <button id="solo-game" type="button" class="btn btn-secondary col-lg-3 col-md-3 col-sm-12 col-xs-12">Solo game !</button>
+                <button id="party-game" type="button" class="btn btn-secondary col-lg-3 col-md-3 col-sm-12 col-xs-12">Party game !</button>
+                
+                <h3 id="warning"></h3>
+
+                <button id="2p" type="button" class="btn btn-secondary nbr-player-selection nbr-player col-lg-3 col-md-3 col-sm-3 col-xs-12">2 Players</button>
+                <button id="3p" type="button" class="btn btn-secondary nbr-player-selection nbr-player col-lg-3 col-md-3 col-sm-3 col-xs-12">3 Players</button>
+                <button id="4p" type="button" class="btn btn-secondary nbr-player-selection nbr-player col-lg-3 col-md-3 col-sm-3 col-xs-12">4 Players</button>
+
+                <button id="btn-return" type="button" class="btn btn-info nbr-player col-lg-4 col-md-4 col-sm-4 col-xs-4">Return</button>
+            </div>
+
 
         </section>
 
@@ -40,6 +61,7 @@
             <div class="question-container">
                 <a href="wikipedia.fr" target="_blank" id="flag-link"><img id="flag" alt=""></a>
                 <h1 id="question"></h1>
+                <h2 id="current-player"></h2>
             </div>
 
             <div class="btn-container">
@@ -51,12 +73,13 @@
 
             <h3 id="question-count"></h3>
             <h1 id="answer"></h1>
-            <h2 id="score">Score: 0</h2>
+            <h3>Score</h3>
+            <h2 class="score"></h2>
               
-            <h3 id="timer"></h3>
+            <h2 id="timer" style="margin-top: 15px"></h2>
 
     
-            <button id="restart" type="button" class="btn btn-secondary col-lg-3 col-md-3 col-sm-3 col-xs-3">Restart</button>
+            <button id="restart" type="button" class="btn btn-info col-lg-3 col-md-3 col-sm-3 col-xs-3">Restart</button>
         </section>
 
         <footer>

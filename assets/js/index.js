@@ -32,19 +32,22 @@ var currentRegion = "";
 var btns = {};
 var playerAnswer = -1;
 var correctBtnIndex = 0;
-var score = 0; 
+var scores = []; 
 var timer;
 var timeDelay = 2000;
 var questionCount = 0;
 var currentCountriesCount = 0;
+var numPlayers = 0;
+var currentPlayerId = 0;
 
 populateRegions();
 populateRegionsUI();
 regionSelection();
-startGame();
+hidePlayerSelectionButtons();
+startUI();
+startMultiPlayerGameUI();
 btns = getBtns();
 getPlayerAnswer();
-var timerIntervalId = 0;
 
 function populateRegionsUI(){
     var dropdownElt = document.querySelector(".dropdown-menu");
@@ -78,42 +81,138 @@ function regionSelection(){
     });
 }
 
-function startGame(){
-    var startElt = document.getElementById("start-game");
-    var warningElt = document.getElementById("warning");
-    startElt.addEventListener("click", function(){
-        questionCount = 0;
-        if(regions.indexOf(currentRegion) === -1){
-            warningElt.textContent = "Please select a region :)";
-            return;
+function startUI(){
+    var soloElt = document.getElementById("solo-game");
+    questionCount = 0;
+    soloElt.addEventListener("click", function(){
+        numPlayers = 1;
+        if(regionCheck()){
+            currentPlayerId = 0;
+            scores[currentPlayerId] = 0;
+            currentCountriesCount = countries.length;
+            setScoreUI();
+            startGame();
         }
-
-        if(currentRegion === ALL_REGIONS_STRING){
-            countries = allCountries.slice(0);
-        }else{
-            countries = allCountries.filter(function(country){
-                return country.region === currentRegion;
-            });
-        }
-
-        currentCountriesCount = countries.length;
-
-        document.querySelector("#dropdownMenuButton").textContent = "Select region";
-        loadNewQuestion(0);
-        hideMainScreen();
-        showGameScreen();
-        
     });
 
+    var partyElt = document.getElementById("party-game");
+    partyElt.addEventListener("click", function(){
+        if(regionCheck()){
+            showMultiPlayerUI();
+            getNumPlayers();
+        }
+        
+
+    });
+
+    var returnElt = document.getElementById("btn-return");
+    returnElt.addEventListener("click", function(){
+        hideMultiPlayerUI();
+    });
+    
     var restartElt = document.getElementById("restart");
     restartElt.addEventListener("click", function(){
-        showMainScreen();
-        hideGameScreen();
-        score = 0;
-        warningElt.textContent = "";
-        currentRegion = "";
-        updateScoreUI();
+        stopGame();
     });  
+}
+
+function startGame(){
+    document.querySelector("#dropdownMenuButton").textContent = "Select region";
+    loadNewQuestion(0);
+    hideMainScreen();
+    showGameScreen();
+}
+
+function stopGame(){
+    numPlayers = 0;
+    showMainScreen();
+    hideGameScreen();
+    scores.forEach(function(score){
+        score = 0;
+    });
+    document.getElementById("warning").textContent = "";
+    currentRegion = "";
+    updateScoreUI();
+    stopTimer();
+    questionCount = 0;
+}
+
+function regionCheck(){
+    var warningElt = document.getElementById("warning");
+    if(regions.indexOf(currentRegion) === -1){
+        warningElt.textContent = "Please select a region :)";
+        setTimeout(function(){
+            warningElt.textContent = "";
+        }, timeDelay);
+        return false;
+    }
+
+    if(currentRegion === ALL_REGIONS_STRING){
+        countries = allCountries.slice(0);
+    }else{
+        countries = allCountries.filter(function(country){
+            return country.region === currentRegion;
+        });
+    }
+
+    return true;
+}
+
+function getNumPlayers(){
+    var foo = document.getElementsByClassName("nbr-player-selection");
+    var numPlayerElts = [];
+    for(var i=0; i < foo.length; i++){
+        numPlayerElts.push(foo[i]);
+    }
+    numPlayerElts.forEach(function(numPlayerElt){
+        numPlayerElt.addEventListener("click", function(){
+            if(isNaN(Number(numPlayerElt.id[0]))){
+                return;
+            }
+            numPlayers = Number(numPlayerElt.id[0]);
+            for(var j=0; j<numPlayers; j++){
+                scores.push(0);
+            }
+            hideMultiPlayerUI();
+            setScoreUI();
+        });
+    });
+}
+
+function startMultiPlayerGameUI(){
+    var foo = document.getElementsByClassName("nbr-player-selection");
+    var numPlayerElts = [];
+    for(var i=0; i < foo.length; i++){
+        numPlayerElts.push(foo[i]);
+    }
+    numPlayerElts.forEach(function(numPlayerElt){
+        numPlayerElt.addEventListener("click", function(){
+            currentCountriesCount = countries.length;
+            startGame();
+        });
+    });
+}
+
+function showMultiPlayerUI(){
+    $("#solo-game").hide();
+    $("#party-game").hide();
+    $(".dropdown").hide();
+    showPlayerSelectionButtons();
+}
+
+function hideMultiPlayerUI(){
+    $("#solo-game").show();
+    $("#party-game").show();
+    $(".dropdown").show();
+    hidePlayerSelectionButtons();
+}
+
+function hidePlayerSelectionButtons(){
+    $(".nbr-player").hide();
+}
+
+function showPlayerSelectionButtons(){
+    $(".nbr-player").show();
 }
 
 function hideMainScreen(){
@@ -188,31 +287,42 @@ function populateBtns(){
 function getPlayerAnswer(){
     btns[0].addEventListener("click", function(){
         playerAnswer = 0;
-        displayResult();
+        displayResult(currentPlayerId);
+        nextPlayer();
         loadNewQuestion(timeDelay);
     });
     btns[1].addEventListener("click", function(){
         playerAnswer = 1;
-        displayResult();
+        displayResult(currentPlayerId);
+        nextPlayer();
         loadNewQuestion(timeDelay);
     });
     btns[2].addEventListener("click", function(){
         playerAnswer = 2;
-        displayResult();
+        displayResult(currentPlayerId);
+        nextPlayer();
         loadNewQuestion(timeDelay);
     });
     btns[3].addEventListener("click", function(){
         playerAnswer = 3;
-        displayResult();
+        displayResult(currentPlayerId);
+        nextPlayer();
         loadNewQuestion(timeDelay);
     });
 }
 
-function displayResult(){
-    //document.getElementById("timer").textContent = "-";
+function nextPlayer(){
+    if(currentPlayerId+1 === numPlayers){
+        currentPlayerId = 0;
+    }else{
+        currentPlayerId += 1;
+    }
+}
+
+function displayResult(playerId){
     var reponseElt = document.getElementById("answer");
     if(isCorrect()){
-        score+=1;
+        scores[playerId]+=1;
         reponseElt.textContent = "Correct ! " + currentCountry.description;
     }else{
         reponseElt.textContent = "Naah... " + currentCountry.description;
@@ -227,8 +337,26 @@ function clearResult(){
 }
 
 function updateScoreUI(){
-    var scoreElt = document.getElementById("score");
-    scoreElt.textContent = "Score: " + score;
+    var scoreElts = document.getElementsByClassName("score");
+    for(var i= 0; i< numPlayers; i++){
+        scoreElts[i].textContent = "Player " + (i+1) + ": " + scores[i];
+    }
+
+    if(numPlayers === 0){
+        for(var j= 0; j< scoreElts.length; j++){
+            scoreElts[j].textContent = "";
+        }
+    }
+}
+
+function setScoreUI(){
+    var scoreElts = document.getElementsByClassName("score");
+    while(scoreElts.length <= numPlayers){
+        var newScoreElt = document.createElement("h2");
+        newScoreElt.setAttribute("class","score");
+        newScoreElt.textContent = "-";
+        scoreElts[0].parentNode.insertBefore(newScoreElt, scoreElts[0]);
+    }
 }
 
 function displayQuestion(){
@@ -238,6 +366,13 @@ function displayQuestion(){
     displayQuestionCount();
     setTimer();
     displayFlag();
+    if(numPlayers > 1){
+        displayCurrentPlayer();
+    }
+}
+
+function displayCurrentPlayer(){
+    document.getElementById("current-player").textContent = "Your turn Player " + (currentPlayerId+1);
 }
 
 function setTimer(){
@@ -248,7 +383,8 @@ function setTimer(){
         timerElt.textContent = e.data.count;
         if(e.data.complete === true){
             timerElt.textContent = "Time out";
-            displayResult();
+            displayResult(currentPlayerId);
+            nextPlayer();
             loadNewQuestion(timeDelay);
         }
     };

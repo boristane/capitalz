@@ -8,17 +8,17 @@ body{
 }
 
 h1{
-    font-size: 2em;
+    font-size: 1.5em;
     margin-bottom: 20px;
     margin-top: 10px;
 }
 
 h2{
-    font-size: 1.5em;
+    font-size: 1.0em;
 }
 
 h3{
-    font-size: 1.0em;
+    font-size: 0.6em;
 }
 
 section {
@@ -42,6 +42,21 @@ footer a:hover{
     color: rgb(0, 0, 0);
 }
 
+header a{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+header a:visited {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+header a:hover{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
 footer {
     font-size: 0.95em;
 }
@@ -61,21 +76,26 @@ footer {
     float: left;
     margin-top: 5px;
     margin-bottom: 5px;
-    margin-right: 20px;
-    margin-left: 20%;
+    margin-right: 0px;
+    margin-left: 5%;
     text-align: center;
+    padding: 0px;
 }
 
 
-#start-game{
-    float: left;
+#solo-game{   
     margin-top: 5px;
     margin-bottom: 5px;
-    margin-left: 30px;
+}
+
+#party-game{ 
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #warning{
     color: red;
+    margin-top: 5px;
 }
 
 #question-count{
@@ -85,6 +105,21 @@ footer {
 #flag{
     margin-top: 15px;
     box-shadow: 5px 5px 5px grey;
+}
+
+#btn-return{
+    margin-top: 15px;
+}
+
+@media screen and (min-width: 575px) and (max-width: 767px) {
+    .dropdown{
+        margin: 0px;
+        margin-top: 15px;
+    }
+
+    #solo-game{
+        margin-top: 20px;
+    }
 }
 
 @media screen and (max-width: 575px) {
@@ -104,15 +139,13 @@ footer {
         margin-right: 30px;
     }
 
-    #start-game{
-        float: left;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        margin-left: 0px;
+    .dropdown{
+        margin: 0px;
+        margin-top: 15px;
     }
 
-    .main-screen{
-        padding-bottom: 50px;
+    .nbr-player{
+        margin-top: 5px;
     }
 
     .page-header{
@@ -122,7 +155,13 @@ footer {
     small{
         font-size: 0.6em;
     }
+
+    #solo-game{
+        margin-top: 20px;
+    }
 }
+
+
 
 
 
