@@ -39,6 +39,7 @@ var questionCount = 0;
 var currentCountriesCount = 0;
 var numPlayers = 0;
 var currentPlayerId = 0;
+var time = 0;
 
 populateRegions();
 populateRegionsUI();
@@ -171,7 +172,6 @@ function getNumPlayers(){
             }
             numPlayers = Number(numPlayerElt.id[0]);
             scores = new Array(numPlayers).fill(0);
-            console.log(scores.length);
             hideMultiPlayerUI();
             setScoreUI();
         });
@@ -319,20 +319,29 @@ function nextPlayer(){
 }
 
 function displayResult(playerId){
-    var reponseElt = document.getElementById("answer");
+    var foo = ["A", "B", "C", "D"];
+    var currentButton = document.getElementById("btn-" + foo[playerAnswer]);
     if(isCorrect()){
-        scores[playerId]+=1;
-        reponseElt.textContent = "Correct ! " + currentCountry.description;
+        if(time > 8)
+            scores[playerId]+=2;
+        else
+            scores[playerId]+=1;
+        currentButton.style.backgroundColor = "green";
     }else{
-        reponseElt.textContent = "Naah... " + currentCountry.description;
+        var correctBtn = document.getElementById("btn-" + foo[correctBtnIndex]);
+        if(currentButton){
+            currentButton.style.backgroundColor = "red";
+        }
+        correctBtn.style.backgroundColor = "green";
     }
     updateScoreUI();
     stopTimer();
 }
 
 function clearResult(){
-    var reponseElt = document.getElementById("answer");
-    reponseElt.textContent = "";
+    btns.forEach(function(btn){
+        btn.style.backgroundColor = "#007BFF";
+    });
 }
 
 function updateScoreUI(){
@@ -349,11 +358,26 @@ function updateScoreUI(){
 }
 
 function setScoreUI(){
+    document.querySelector(".score-container").innerHTML = "<h2 class='score'></h2>";
     var scoreElts = document.getElementsByClassName("score");
+    var i = numPlayers;
+    var foo = 12/numPlayers;
     while(scoreElts.length <= numPlayers){
         var newScoreElt = document.createElement("h2");
         newScoreElt.setAttribute("class","score");
-        newScoreElt.textContent = "-";
+        newScoreElt.classList.add("col-lg-"+foo);
+        newScoreElt.classList.add("col-mg-"+foo*2);
+        newScoreElt.classList.add("col-sm-"+foo*2);
+        newScoreElt.classList.add("col-"+foo*2);
+
+        if(numPlayers === 3){
+            newScoreElt.classList.remove("col-sm-"+foo*2);
+            newScoreElt.classList.remove("col-"+foo*2);
+            newScoreElt.classList.add("col-sm-"+12);
+            newScoreElt.classList.add("col-"+12);
+        }
+        newScoreElt.textContent = "Player " + i + " : -";
+         i-= 1;
         scoreElts[0].parentNode.insertBefore(newScoreElt, scoreElts[0]);
     }
 }
@@ -380,6 +404,7 @@ function setTimer(){
     timer = new Worker("assets/js/timer.js");
     timer.onmessage = function(e){
         timerElt.textContent = e.data.count;
+        time = e.data.count;
         if(e.data.complete === true){
             timerElt.textContent = "Time out";
             displayResult(currentPlayerId);
