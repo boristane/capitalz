@@ -74,6 +74,7 @@ footer {
 
 .score{
     float: left;
+    border-radius: 15px 50px;
 }
 
 .dropdown{
@@ -113,6 +114,8 @@ footer {
 #flag{
     margin-top: 15px;
     box-shadow: 5px 5px 5px grey;
+    height: 60px;
+    width: auto;
 }
 
 #btn-return{

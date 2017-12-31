@@ -237,7 +237,11 @@ function loadNewQuestion(timeDelay){
         btn.disabled = true;
     });
 
+
     setTimeout(function(){
+        btns.forEach(function(btn){
+            btn.blur();
+        });
         currentCountry = randomCountry();
         displayQuestion();
         correctBtnIndex = populateBtns();
@@ -271,13 +275,18 @@ function getBtns(){
 
 function populateBtns(){
     correctBtnIndex = Math.floor(Math.random()*4);
+    var indexes = [];
     for(var i=0; i< btns.length; i++){
         var btn = btns[i];
         if(i===correctBtnIndex){
             btn.textContent = currentCountry.capital;
             continue;
         }
-        var index = Math.floor(Math.random()*allCountries.length);
+        var index = 0;
+        while(indexes.indexOf(index) > -1){
+            index = Math.floor(Math.random()*allCountries.length);
+        }
+        indexes.push(index);
         btn.textContent = allCountries[index].capital;
     }
     return correctBtnIndex;
@@ -323,7 +332,7 @@ function displayResult(playerId){
     var currentButton = document.getElementById("btn-" + foo[playerAnswer]);
     if(isCorrect()){
         if(time > 8)
-            scores[playerId]+=2;
+            scores[playerId]+=1;
         else
             scores[playerId]+=1;
         currentButton.style.backgroundColor = "green";
@@ -348,6 +357,18 @@ function updateScoreUI(){
     var scoreElts = document.getElementsByClassName("score");
     for(var i= 0; i< numPlayers; i++){
         scoreElts[i].textContent = "Player " + (i+1) + ": " + scores[i];
+        
+        if(scores[i] === Math.max.apply(null, scores)){
+            scoreElts[i].style.backgroundColor = "#99ff99";
+        }else if(scores[i] === Math.min.apply(null, scores)){
+            scoreElts[i].style.backgroundColor = "#ff9999";
+        } else{
+            scoreElts[i].style.backgroundColor = "white";
+        }
+
+        if(numPlayers === 1){
+            scoreElts[i].style.backgroundColor = "white";
+        }
     }
 
     if(numPlayers === 0){
